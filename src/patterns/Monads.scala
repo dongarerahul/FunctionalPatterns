@@ -1,4 +1,4 @@
-package functors
+package patterns
 
 /***
   * a) ( A=>B )    => ( C[A]=>C[B] )   | Functor

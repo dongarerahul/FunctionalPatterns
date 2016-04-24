@@ -1,4 +1,4 @@
-package functors
+package patterns
 
 /***
   * a) ( A=>B )    => ( C[A]=>C[B] )   | Functor
@@ -12,6 +12,9 @@ object Functors {
 
   def main(args: Array[String]) {
     println("My First Functor : map(rawLengthOf)(boxedString) : " + map(rawLengthOf)(boxedString))
+
+    val result = new MyBox2[String]("Welcome")
+    println ("Simple Usage of Functor: " )
   }
 
   def lengthOf(box: MyBox[String]) : MyBox[Int] = ???

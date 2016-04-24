@@ -1,4 +1,4 @@
-package functors
+package patterns
 
 /***
   * a) ( A=>B )    => ( C[A]=>C[B] )   | Functor
@@ -14,11 +14,10 @@ object Applicatives {
     val applicative = apply[String, Int](boxedLengthOf)(boxedString)
 
     println("My First Applicative : flatMap(rawLengthOf)(boxedString) : " + applicative)
-    
   }
 
-  def lengthOf(a: String) : Int = a.length
   val boxedLengthOf = new MyBox2[String => Int](lengthOf)
+  def lengthOf(a: String) : Int = a.length
 
   def apply[A, B](f: MyBox2[A => B]) : MyBox2[A] => MyBox2[B] = {
     myBox: MyBox2[A] => new MyBox2(f.value(myBox.value))
