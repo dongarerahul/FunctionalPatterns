@@ -1,12 +1,16 @@
 package patterns
 
 trait Functor[C[_]] {
-  def map[A, B](f : A => B): C[A] => C[B]
+  def map[A, B](f : A => B) : C[B]
 }
 
-trait Applicative[F[_]] {
-  def apply[A, B](f: F[A => B]): F[A] => F[B]
+trait Applicative[F[_]] extends Functor[F] {
+  def pure[A](a: A) : F[A]
+  def apply[A, B](f: F[A => B]) : F[B]
+  override def map[A, B](f: A => B): F[B] = apply(pure(f))
 }
+
+
 
 object ApplicativeVsMonad {
 
@@ -31,7 +35,7 @@ object ApplicativeVsMonad {
     */
   val mayBeFoo1 = maybeComputeS(whatever).flatMap(s => maybeComputeN(whatever).map(n => Foo(s, n)))
 
-  (Applicative[Option] apply (Functor[Option] map g)(Option(5)))(Option(10))
+  //(Applicative[Option] apply (Functor[Option] map g)(Option(5)))(Option(10))
 
   def main(args: Array[String]) {
 
