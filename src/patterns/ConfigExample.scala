@@ -7,23 +7,38 @@ object ConfigExample {
 }
 
 //Functor type
-trait Functor[F[_]] {
+trait Functor1[F[_]] {
   def apply[A](a: A) : F[A]
-  def map[A, B](x: F[A])(f: A => B) : F[B]
-}
-
-trait Monad[M[_]] {
-  def flatten[A](m: M[M[A]]) : M[A]
-  def flatMap[A, B](m: M[A])(f: A => M[B])(implicit func: Functor[M]) : M[B] = flatten(func.map(m)(f))
+  //def map[A, B](x: F[A])(f: A => B) : F[B]
 }
 
 trait Config[+A] {
-  def map[B](f: A => B) : Config[B]
-  def flatMap[B](f: A => Config[B]) : Config[B]
+  def map[B](f: A => B) : Config[B] = ???
+  //def flatMap[B](f: A => Config[B]) : Config[B]
   def get : A
 }
 
 object Config {
+  def apply[A](data: => A) = new Config[A] {
+    override def get = data
+  }
+}
+
+object ConfigAsFunctor extends Functor[Config] {
+  def apply[A] (a: A) : Config[A] = Config(a)
+  def map[A, B](c: Config[A])(f: A => B): Config[B] = c.map(f)
+
+  override def map[A, B](f: (A) => B): Config[B] = ???
+}
+
+/*trait Monad[M[_]] {
+  def flatten[A](m: M[M[A]]) : M[A]
+  def flatMap[A, B](m: M[A])(f: A => M[B])(implicit func: Functor[M]) : M[B] = flatten(func.map(m)(f))
+}*/
+
+
+
+/*object Config {
   def apply[A](data: => A) = new Config[A] {
     def get = data
 
@@ -34,12 +49,12 @@ object Config {
 }
 
 object ConfigAsFunctor extends Functor[Config] {
-  override def apply[A](a: A): Config[A] = Config(a)
+  override def apply[A](a: A): Config[A] = ??? //Config(a)
   override def map[A, B](a: Config[A])(f: A => B): Config[B] = a.map(f)
 
   implicit def functorOps[F[_] : Functor, A](ma: F[A]) = new {
     val functor : Functor[F] = implicitly[Functor[F]]
-    final def map[B](f: A => B) : F[B] = functor.map(ma)(f)
+    final def map[B](f: A => B) : F[B] = ??? //functor.map(ma)(f)
   }
 
   def lift[F[_]: Functor] = new {
@@ -48,4 +63,4 @@ object ConfigAsFunctor extends Functor[Config] {
       (fa, fb, fc) => fa map(a => fb map(b => fc map(c => f(a, b, c))))
     }
   }
-}
+}*/
