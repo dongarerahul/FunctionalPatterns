@@ -26,11 +26,11 @@ object Main {
   }
 
   def checkLogin(userId: Int, password: String): DbReader[Boolean] = {
-    //checkUserName(userId).flatMap(userName => checkPassword(userName.getOrElse(""), password))
-    for {
+    checkUserName(userId).flatMap(userName => checkPassword(userName.getOrElse(""), password))
+    /*for {
       userName <- checkUserName(userId)
       isValidLogin <- checkPassword(userName.getOrElse(""), password)
-    } yield isValidLogin
+    } yield isValidLogin*/
   }
 
   def main(args: Array[String]): Unit = {
